@@ -4,7 +4,8 @@
   "description": "--",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "gulp clean-assets && gulp css-dev && gulp js-dev  && gulp watch",
+    "build": "gulp clean-assets && gulp css-build && gulp js-build"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,13 @@
     "gulp-clean-css": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-concat-css": "^3.1.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
-    "gulp-v4": "^4.0.0-alpha.5"
+    "gulp-v4": "^4.0.0-alpha.5",
+    "node-normalize-scss": "^8.0.0"
   }
 }
