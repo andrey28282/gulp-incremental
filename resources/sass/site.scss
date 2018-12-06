@@ -1,1 +1,11 @@
 // импортировать container.scss & alert.scss
+
+@import "partials/container.scss";
+@import "partials/alert.scss";
+
+
+.container{
+	max-width:1170px;
+	margin:auto;
+}
+
