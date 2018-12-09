@@ -10,7 +10,8 @@ sourcemaps = require('gulp-sourcemaps'),
 uglify = require("gulp-uglify"),
 rename = require("gulp-rename"),
 notify = require("gulp-notify"),
-plumber = require("gulp-plumber");
+plumber = require("gulp-plumber"),
+gulp_changed = require("gulp-changed");
 
 
 //======================Dev=========================================
@@ -30,7 +31,8 @@ gulp.task('clean-assets', function () {
 
 //работаю с css 
 gulp.task('css-dev', function () {
-    return gulp.src('resources/sass/*.scss' , {since: gulp.lastRun('css-dev')})
+    return gulp.src('resources/sass/*.scss')
+        .pipe(gulp_changed('public/assets/css/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
@@ -46,7 +48,8 @@ gulp.task('css-dev', function () {
 
 //работаю с js
 gulp.task('js-dev', function () {
-    return gulp.src('resources/js/*.js', { since: gulp.lastRun('js-dev') })
+    return gulp.src('resources/js/*.js')
+        .pipe(gulp_changed('public/assets/js/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
