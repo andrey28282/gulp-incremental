@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "gulp clean-assets && gulp css-dev && gulp js-dev  && gulp watch",
-    "build": "gulp clean-assets && gulp css-build && gulp js-build"
+    "build": "gulp clean-assets && gulp css-build && gulp js-build && notifybuild"
   },
   "repository": {
     "type": "git",

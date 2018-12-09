@@ -26,7 +26,6 @@ var config = {
 gulp.task('clean-assets', function () {
     return gulp.src('public/assets/*', { read: false })
         .pipe(cleanDir())
-        .pipe(notify('Очистка assets завершена'));
 });
 
 //работаю с css 
@@ -39,7 +38,6 @@ gulp.task('css-dev', function () {
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/css/'))
-        .pipe(notify('Обработка css завершена'))
         .pipe(browserSync.stream());
 });
 
@@ -55,7 +53,6 @@ gulp.task('js-dev', function () {
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/js/'))
-        .pipe(notify('Обработка js завершена'));
 });
 
 //Вспомогательная функция которая обновляет страницу при изменении js
@@ -82,8 +79,7 @@ gulp.task('css-build', function () {
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
         .pipe(concat_css("bundle.min.css"))
         .pipe(clean_css())
-        .pipe(gulp.dest('public/assets/css/'))
-        .pipe(notify('Обработка css завершена'));
+        .pipe(gulp.dest('public/assets/css/'));
 });
 
 //работаю с js
@@ -91,9 +87,12 @@ gulp.task('js-build', function () {
     return gulp.src('resources/js/*.js')
         .pipe(concat('bundle.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('public/assets/js/'))
-        .pipe(notify('Обработка js завершена'));
+        .pipe(gulp.dest('public/assets/js/'));
 });
+
+gulp.taks('notifybuild',function(){
+    notify('Сборка завершена');
+})
 //====================================================================
 
 
