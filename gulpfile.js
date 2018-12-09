@@ -63,11 +63,12 @@ gulp.task('js-watch',function(){
     browserSync.reload();
 })
 
-//Отслеживаю изменении
+//Отслеживаю изменения
 gulp.task('watch',function(){
     browserSync.init(config);
     gulp.watch('resources/sass/*.scss', gulp.series('css-dev'));
     gulp.watch('resources/js/*.js', gulp.series('js-dev', 'js-watch'));
+    gulp.watch('public/*.html', browserSync.reload);
 })
 //====================================================================
 
