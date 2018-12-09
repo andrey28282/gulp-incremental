@@ -20,6 +20,7 @@
   "homepage": "https://github.com/andrey28282/gulp-incremental#readme",
   "devDependencies": {
     "browser-sync": "^2.26.3",
+    "gulp": "^4.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.0.0",
     "gulp-concat": "^2.6.1",
@@ -30,7 +31,6 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
-    "gulp-v4": "^4.0.0-alpha.5",
     "node-normalize-scss": "^8.0.0"
   }
 }
