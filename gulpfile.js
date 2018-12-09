@@ -1,5 +1,5 @@
 
-const gulp = require("gulp-v4"),
+const gulp = require("gulp"),
 sass = require('gulp-sass'),
 browserSync = require('browser-sync').create(), 
 cleanDir = require('gulp-clean'),
@@ -11,7 +11,7 @@ uglify = require("gulp-uglify"),
 rename = require("gulp-rename"),
 notify = require("gulp-notify"),
 plumber = require("gulp-plumber"),
-gulp_changed = require("gulp-changed");
+changed = require("gulp-changed");
 
 
 //======================Dev=========================================
@@ -25,13 +25,13 @@ var config = {
 //очищаю assets
 gulp.task('clean-assets', function () {
     return gulp.src('public/assets/*', { read: false })
-        .pipe(cleanDir())
+        .pipe(cleanDir());
 });
 
 //работаю с css 
 gulp.task('css-dev', function () {
     return gulp.src('resources/sass/*.scss')
-        .pipe(gulp_changed('public/assets/css/', { hasChanged: changed.compareContents }))
+        .pipe(changed('public/assets/css/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
@@ -47,7 +47,7 @@ gulp.task('css-dev', function () {
 //работаю с js
 gulp.task('js-dev', function () {
     return gulp.src('resources/js/*.js')
-        .pipe(gulp_changed('public/assets/js/', { hasChanged: changed.compareContents }))
+        .pipe(changed('public/assets/js/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
@@ -87,12 +87,9 @@ gulp.task('js-build', function () {
     return gulp.src('resources/js/*.js')
         .pipe(concat('bundle.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('public/assets/js/'));
+        .pipe(gulp.dest('public/assets/js/'))
+        .pipe(notify('Сборка завершена'));
 });
-
-gulp.taks('notifybuild',function(){
-    notify('Сборка завершена');
-})
 //====================================================================
 
 
