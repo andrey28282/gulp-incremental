@@ -63,9 +63,10 @@ gulp.task('js-watch',function(){
 //Отслеживаю изменения
 gulp.task('watch',function(){
     browserSync.init(config);
-    gulp.watch('resources/sass/*.scss', gulp.series('css-dev'));
-    gulp.watch('resources/js/*.js', gulp.series('js-dev', 'js-watch'));
-    gulp.watch('public/*.html', browserSync.reload);
+    gulp.watch('resources/sass/**/*.scss', gulp.series('css-dev'));
+    gulp.watch('resources/js/**/*.js', gulp.series('js-dev', 'js-watch'));
+    // gulp.watch('public/*.html', browserSync.reload); // срабатывает только один раз
+    gulp.watch('public/*.html').on('change', browserSync.reload);
 })
 //====================================================================
 
@@ -76,6 +77,14 @@ gulp.task('watch',function(){
 //работаю с css 
 gulp.task('css-build', function () {
     return gulp.src('resources/sass/*.scss')
+
+
+        // .pipe(sass({ includePaths: [
+        //     'node_modules/',
+        //     './resources/sass/'
+        // ]}).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+
+        
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
         .pipe(concat_css("bundle.min.css"))
         .pipe(clean_css())
@@ -87,8 +96,7 @@ gulp.task('js-build', function () {
     return gulp.src('resources/js/*.js')
         .pipe(concat('bundle.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('public/assets/js/'))
-        .pipe(notify('Сборка завершена'));
+        .pipe(gulp.dest('public/assets/js/'));
 });
 //====================================================================
 
@@ -102,7 +110,6 @@ gulp.task('js-build', function () {
 //=====================================================================
 // gulp.task('html-dev', function () {  // создано для теста
     // return gulp.src('resources/*.html')
-    //     .pipe(newer('public/'))
     //     .pipe(gulp.dest('public/'))
 // });
 
