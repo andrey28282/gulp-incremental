@@ -11,7 +11,12 @@ uglify = require("gulp-uglify"),
 rename = require("gulp-rename"),
 notify = require("gulp-notify"),
 plumber = require("gulp-plumber"),
-changed = require("gulp-changed");
+changed = require("gulp-changed"),
+postcss = require("gulp-postcss"),
+autoprefixer = require('autoprefixer'),
+css_mqpacker = require("css-mqpacker"),
+sortCSSmq = require('sort-css-media-queries');
+
 
 
 //======================Dev=========================================
@@ -21,6 +26,13 @@ var config = {
         baseDir: "./public"
     }
 };
+
+//плагины postcss
+var postcss_plugins = [
+    autoprefixer({ browsers: ['> 2%','IE 11'] }),
+    css_mqpacker({ sort: sortCSSmq})
+];
+
 
 //очищаю assets
 gulp.task('clean-assets', function () {
@@ -35,6 +47,7 @@ gulp.task('css-dev', function () {
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(postcss(postcss_plugins))
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/css/'))
@@ -86,6 +99,7 @@ gulp.task('css-build', function () {
 
         
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(postcss(postcss_plugins))
         .pipe(concat_css("bundle.min.css"))
         .pipe(clean_css())
         .pipe(gulp.dest('public/assets/css/'));
