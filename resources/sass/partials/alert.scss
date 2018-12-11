@@ -1,0 +1,22 @@
+.alert{
+    font-family: Arial , sans-serif;
+    padding: 1.188rem;
+    margin: 1.25rem 0;
+    border-radius: 10px;
+}
+
+.alert--info{
+    background-color:#43b0d0 ;
+    color:#194f90;
+}
+.alert--danger{
+    background-color:#db5b00 ;
+    color:#ffffff;
+}
+
+.alert--danger a,
+.alert--info a{
+    color:inherit;
+    font-style: italic;
+    font-weight: bold;
+}

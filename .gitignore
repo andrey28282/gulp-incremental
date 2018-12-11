@@ -1,3 +1,5 @@
 .vscode/
 public/assets/
 node_modules/
+/.idea/
+/*.log*

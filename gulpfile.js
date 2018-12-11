@@ -1,5 +1,5 @@
 
-const gulp = require("gulp-v4"),
+const gulp = require("gulp"),
 sass = require('gulp-sass'),
 browserSync = require('browser-sync').create(), 
 cleanDir = require('gulp-clean'),
@@ -10,7 +10,8 @@ sourcemaps = require('gulp-sourcemaps'),
 uglify = require("gulp-uglify"),
 rename = require("gulp-rename"),
 notify = require("gulp-notify"),
-plumber = require("gulp-plumber");
+plumber = require("gulp-plumber"),
+changed = require("gulp-changed");
 
 
 //======================Dev=========================================
@@ -24,20 +25,19 @@ var config = {
 //очищаю assets
 gulp.task('clean-assets', function () {
     return gulp.src('public/assets/*', { read: false })
-        .pipe(cleanDir())
-        .pipe(notify('Очистка assets завершена'));
+        .pipe(cleanDir());
 });
 
 //работаю с css 
 gulp.task('css-dev', function () {
-    return gulp.src('resources/sass/*.scss' , {since: gulp.lastRun('css-dev')})
+    return gulp.src('resources/sass/*.scss')
+        .pipe(changed('public/assets/css/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/css/'))
-        .pipe(notify('Обработка css завершена'))
         .pipe(browserSync.stream());
 });
 
@@ -46,13 +46,13 @@ gulp.task('css-dev', function () {
 
 //работаю с js
 gulp.task('js-dev', function () {
-    return gulp.src('resources/js/*.js', { since: gulp.lastRun('js-dev') })
+    return gulp.src('resources/js/*.js')
+        .pipe(changed('public/assets/js/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/js/'))
-        .pipe(notify('Обработка js завершена'));
 });
 
 //Вспомогательная функция которая обновляет страницу при изменении js
@@ -60,11 +60,13 @@ gulp.task('js-watch',function(){
     browserSync.reload();
 })
 
-//Отслеживаю изменении
+//Отслеживаю изменения
 gulp.task('watch',function(){
     browserSync.init(config);
-    gulp.watch('resources/sass/*.scss', gulp.series('css-dev'));
-    gulp.watch('resources/js/*.js', gulp.series('js-dev', 'js-watch'));
+    gulp.watch('resources/sass/**/*.scss', gulp.series('css-dev'));
+    gulp.watch('resources/js/**/*.js', gulp.series('js-dev', 'js-watch'));
+    // gulp.watch('public/*.html', browserSync.reload); // срабатывает только один раз
+    gulp.watch('public/*.html').on('change', browserSync.reload);
 })
 //====================================================================
 
@@ -75,11 +77,18 @@ gulp.task('watch',function(){
 //работаю с css 
 gulp.task('css-build', function () {
     return gulp.src('resources/sass/*.scss')
+
+
+        // .pipe(sass({ includePaths: [
+        //     'node_modules/',
+        //     './resources/sass/'
+        // ]}).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+
+        
         .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
         .pipe(concat_css("bundle.min.css"))
         .pipe(clean_css())
-        .pipe(gulp.dest('public/assets/css/'))
-        .pipe(notify('Обработка css завершена'));
+        .pipe(gulp.dest('public/assets/css/'));
 });
 
 //работаю с js
@@ -87,8 +96,7 @@ gulp.task('js-build', function () {
     return gulp.src('resources/js/*.js')
         .pipe(concat('bundle.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('public/assets/js/'))
-        .pipe(notify('Обработка js завершена'));
+        .pipe(gulp.dest('public/assets/js/'));
 });
 //====================================================================
 
@@ -102,7 +110,6 @@ gulp.task('js-build', function () {
 //=====================================================================
 // gulp.task('html-dev', function () {  // создано для теста
     // return gulp.src('resources/*.html')
-    //     .pipe(newer('public/'))
     //     .pipe(gulp.dest('public/'))
 // });
 
