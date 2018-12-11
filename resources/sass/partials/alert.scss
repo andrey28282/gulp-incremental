@@ -3,20 +3,22 @@
     padding: 1.188rem;
     margin: 1.25rem 0;
     border-radius: 10px;
-}
 
-.alert--info{
-    background-color:#43b0d0 ;
-    color:#194f90;
-}
-.alert--danger{
-    background-color:#db5b00 ;
-    color:#ffffff;
-}
-
-.alert--danger a,
-.alert--info a{
-    color:inherit;
-    font-style: italic;
-    font-weight: bold;
+    &--info{
+        background-color: $info_bg;
+        color: $info_color;
+            & a{
+                color:inherit;
+                font-style: italic;
+            }
+    }
+    &--danger{
+        background-color: $danger_bg;
+        color: $danger_color;
+         & a{
+                color:inherit;
+                font-style: italic;
+                font-weight: bold;
+            }
+    }
 }
