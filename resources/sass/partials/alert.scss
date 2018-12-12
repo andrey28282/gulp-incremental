@@ -17,8 +17,10 @@
         color: $danger_color;
          & a{
                 color:inherit;
-                font-style: italic;
-                font-weight: bold;
+                font: {
+                    style: italic;
+                    weight: bold;
+                }
             }
     }
 }
