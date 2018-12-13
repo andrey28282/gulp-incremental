@@ -21,6 +21,7 @@
 - [css-mqpacker](https://www.npmjs.com/package/css-mqpacker "NPM - документация") 
 - [sort-css-media-queries](https://www.npmjs.com/package/sort-css-media-queries "NPM - документация") 
 - [postcss-import](https://www.npmjs.com/package/postcss-import "NPM - документация") 
+- [babel 7](https://babeljs.io/setup#installation " Документация") 
 
 ##### Структура  каталогов
 - *resources/* - содержит  файлы которые будут обработаны Gulp.
@@ -47,10 +48,10 @@
 
 | css | js |
 | ------ | ------ |
-|рендеринг sass| создание sourcemaps|
-|autoprefixer| rename файлов |
-|css_mqpacker|browser-sync|
-|postcss_import (normalize.css)||
+|рендеринг sass| babel 7|
+|autoprefixer| создание sourcemaps |
+|css_mqpacker|rename файлов|
+|postcss_import (normalize.css)|browser-sync|
 |создание sourcemaps||
 |rename файлов ||
 |browser-sync||
@@ -60,9 +61,9 @@
 
 | css | js |
 | ------ | ------ |
-|рендеринг sass| concat js|
-|autoprefixer|uglify|
-|css_mqpacker||
+|рендеринг sass| babel 7|
+|autoprefixer|concat js|
+|css_mqpacker|uglify|
 |postcss_import (normalize.css)||
 |concat css||
 |clean css||
