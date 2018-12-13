@@ -16,7 +16,8 @@ postcss = require("gulp-postcss"),
 autoprefixer = require('autoprefixer'),
 css_mqpacker = require("css-mqpacker"),
 sortCSSmq = require('sort-css-media-queries'),
-postcss_import = require("postcss-import");
+postcss_import = require("postcss-import"),
+babel = require("gulp-babel");
 
 
 
@@ -65,6 +66,7 @@ gulp.task('js-dev', function () {
         .pipe(changed('public/assets/js/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
+        .pipe(babel())
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/js/'))
@@ -101,6 +103,7 @@ gulp.task('css-build', function () {
 //работаю с js
 gulp.task('js-build', function () {
     return gulp.src('resources/js/*.js')
+        .pipe(babel())
         .pipe(concat('bundle.js'))
         .pipe(uglify())
         .pipe(gulp.dest('public/assets/js/'));
