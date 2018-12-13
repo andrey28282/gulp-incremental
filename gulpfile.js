@@ -11,7 +11,13 @@ uglify = require("gulp-uglify"),
 rename = require("gulp-rename"),
 notify = require("gulp-notify"),
 plumber = require("gulp-plumber"),
-changed = require("gulp-changed");
+changed = require("gulp-changed"),
+postcss = require("gulp-postcss"),
+autoprefixer = require('autoprefixer'),
+css_mqpacker = require("css-mqpacker"),
+sortCSSmq = require('sort-css-media-queries'),
+postcss_import = require("postcss-import");
+
 
 
 //======================Dev=========================================
@@ -21,6 +27,14 @@ var config = {
         baseDir: "./public"
     }
 };
+
+//плагины postcss
+var postcss_plugins = [
+    autoprefixer({ browsers: ['> 2%','IE 11'] }),
+    css_mqpacker({ sort: sortCSSmq}),
+    postcss_import()
+];
+
 
 //очищаю assets
 gulp.task('clean-assets', function () {
@@ -34,7 +48,8 @@ gulp.task('css-dev', function () {
         .pipe(changed('public/assets/css/', { hasChanged: changed.compareContents }))
         .pipe(plumber())
         .pipe(sourcemaps.init())
-        .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(sass().on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(postcss(postcss_plugins))
         .pipe(sourcemaps.write())
         .pipe(rename({ prefix: "bundle-" }))
         .pipe(gulp.dest('public/assets/css/'))
@@ -65,7 +80,6 @@ gulp.task('watch',function(){
     browserSync.init(config);
     gulp.watch('resources/sass/**/*.scss', gulp.series('css-dev'));
     gulp.watch('resources/js/**/*.js', gulp.series('js-dev', 'js-watch'));
-    // gulp.watch('public/*.html', browserSync.reload); // срабатывает только один раз
     gulp.watch('public/*.html').on('change', browserSync.reload);
 })
 //====================================================================
@@ -77,15 +91,8 @@ gulp.task('watch',function(){
 //работаю с css 
 gulp.task('css-build', function () {
     return gulp.src('resources/sass/*.scss')
-
-
-        // .pipe(sass({ includePaths: [
-        //     'node_modules/',
-        //     './resources/sass/'
-        // ]}).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
-
-        
-        .pipe(sass({ includePaths: require('node-normalize-scss').includePaths }).on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(sass().on('error', notify.onError({ message: "<%= error.message %>", title: "Ошибка Sass" })))
+        .pipe(postcss(postcss_plugins))
         .pipe(concat_css("bundle.min.css"))
         .pipe(clean_css())
         .pipe(gulp.dest('public/assets/css/'));
